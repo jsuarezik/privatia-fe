@@ -58,7 +58,6 @@ const CreateContact = (props) => {
             api.put(`/contacts/${id}`, formValues).then(handleSuccessResponse).catch(handleErrorResponse)
         }
     }
-
     const handleChange = (event) => {
         const target = event.target;
         const {name , value} = target

@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react'
 import {makeStyles} from '@material-ui/core/styles'
-import { Container, Grid, Typography, Button, TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, IconButton} from '@material-ui/core';
+import { Container, Grid, Typography, Button, TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, IconButton, Dialog, DialogTitle, DialogContent, DialogActions} from '@material-ui/core';
 import { Add, Edit, Delete } from '@material-ui/icons'
 import { useParams, useHistory} from 'react-router-dom';
 import api from '../../services/default'
@@ -20,6 +20,8 @@ const ContactList = (props) => {
   const classes = useStyles()
   const history = useHistory()
   const [dataRow, setDataRow] = useState(null)
+  const [open, setOpen] = useState(false)
+  const [deleteId, setDeleteId] = useState(false)
   const params = useParams();
   const {id} = params;
   useEffect( () => {
@@ -56,7 +58,7 @@ const ContactList = (props) => {
           <IconButton color="primary" onClick={() => handleEdit(row)}>
             <Edit />
           </IconButton>
-          <IconButton color="primary">
+          <IconButton color="primary" onClick={() => handleDelete(row.id)}>
             <Delete />
           </IconButton>
         </TableCell>
@@ -68,6 +70,45 @@ const ContactList = (props) => {
     history.push(`/new-contact`, { enterpriseId : id})
   }
 
+  const handleDeleteDialog = () => {
+		const handleCancel = () => {
+			setOpen(false)
+		}
+		const handleOk = () => {
+			api.delete(`/contacts/${deleteId}`).then(response => {
+				setDataRow(dataRow.filter(x => x.id !== deleteId))
+				setDeleteId(false)
+				setOpen(false)
+			}).catch(error => console.error(error));
+		}
+		return (
+			<Dialog 
+				disableBackdropClick
+				disableEscapeKeyDown
+				maxWidth="lg"
+				open={open}
+			>
+				<DialogTitle align="center"> Delete Contact </DialogTitle>
+				<DialogContent dividers> 
+					<Typography variant='subtitle1'> Are you sure you want to delete this contact?
+					</Typography>
+				</DialogContent>
+				<DialogActions>
+					<Button autoFocus onClick={handleCancel}>
+						Cancel
+					</Button>
+					<Button onClick={handleOk}>
+						OK
+					</Button>
+				</DialogActions>
+			</Dialog>
+		)
+  }
+  
+  const handleDelete = (id) => {
+		setOpen(true)
+		setDeleteId(id);
+	}
   return (
     <Container maxWidth="lg">
      <Grid container>
@@ -101,6 +142,7 @@ const ContactList = (props) => {
          </TableContainer>
        </Grid>
      </Grid>
+     {handleDeleteDialog()}
     </Container>
   )
 }
