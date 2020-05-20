@@ -1,3 +1,4 @@
+import 'date-fns'
 import React, { useEffect, useState } from "react";
 import {
   Grid,
@@ -10,8 +11,13 @@ import {
   Select,
   MenuItem
 } from "@material-ui/core";
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider
+} from '@material-ui/pickers';
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory, useParams } from "react-router-dom"
+import DateFnsUtils from '@date-io/date-fns';
 import api from '../../services/default'
 
 const useStyles = makeStyles({
@@ -24,7 +30,7 @@ const useStyles = makeStyles({
   }
 });
 
-const INITIAL_FORM = { name: "", ruc: "", invoice_address: "", online_invoice_address: "" , status : false, contract_date: null, service_type : ''};
+const INITIAL_FORM = { name: "", ruc: "", invoice_address: "", online_invoice_address: "" , status : false, contract_date: new Date(), service_type : ''};
 
 const CreateEnterprise = (props) => {
   const classes = useStyles();
@@ -55,7 +61,7 @@ const CreateEnterprise = (props) => {
   const handleChange = event => {
     const target = event.target;
     const { name, value } = target;
-
+    console.log(name, value);
     setFormValues({ ...formValues, [name]: value });
   };
 
@@ -79,6 +85,23 @@ const CreateEnterprise = (props) => {
     history.goBack();
   }
 
+  const handleDatePicker = () => {
+    return (
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+         <KeyboardDatePicker
+            disableToolbar
+            variant="inline"
+            format="yyyy-MM-dd"
+            margin="normal"
+            name="contract_date"
+            value={formValues.contract_date}
+            onChange={(date) => setFormValues({ ... formValues, contract_date : date})}
+         >
+
+        </KeyboardDatePicker>
+      </MuiPickersUtilsProvider>
+    )
+  }
   return (
     <>
       <Container maxWidth="lg">
@@ -139,6 +162,7 @@ const CreateEnterprise = (props) => {
                   shrink: true
                 }}
               />
+              {handleDatePicker()}
               <InputLabel shrink>
                 <Typography>
                   Status
