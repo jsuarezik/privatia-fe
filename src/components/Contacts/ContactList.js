@@ -24,6 +24,7 @@ const ContactList = (props) => {
   const [deleteId, setDeleteId] = useState(false)
   const params = useParams();
   const {id} = params;
+  
   useEffect( () => {
     handleRequest();
   }, [])

@@ -24,7 +24,7 @@ const useStyles = makeStyles({
   }
 });
 
-const INITIAL_FORM = { name: "", ruc: "", invoice_address: "", online_invoice_address: "" , status : false};
+const INITIAL_FORM = { name: "", ruc: "", invoice_address: "", online_invoice_address: "" , status : false, contract_date: null, service_type : ''};
 
 const CreateEnterprise = (props) => {
   const classes = useStyles();
@@ -38,15 +38,16 @@ const CreateEnterprise = (props) => {
     if (id) {
       const { state } = history.location;
       if (!state) return;
-
       setIsEdit(true);
-      setFormValues(...formValues, ... {
+      setFormValues({...formValues, ... {
         name: state.name,
         ruc: state.ruc,
         invoice_address: state.invoice_address,
         online_invoice_address: state.online_invoice_address,
-        status : state.status || false
-      })
+        status : state.status || false,
+        contract_date : state.contract_date || null,
+        service_type : state.service_type
+      }}) 
     }
 
   }, [])

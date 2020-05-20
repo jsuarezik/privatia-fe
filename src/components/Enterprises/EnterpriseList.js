@@ -54,6 +54,7 @@ const SimpleTable = (props) => {
 	}
 
 	const handleEdit = (row) => {
+		console.log(row);
 		history.push(`/companies/${row.id}/edit`, {
 			...row
 		})
@@ -77,10 +78,13 @@ const SimpleTable = (props) => {
 				<TableCell component="th" scope="row">
 					{row.name}
 				</TableCell>
-				<TableCell align="right">{row.ruc}</TableCell>
-				<TableCell align="right">{row.invoice_address}</TableCell>
-				<TableCell align="right">{row.status ? "Active" : "Inactive"}</TableCell>
-				<TableCell align="right">
+				<TableCell align="center">{row.ruc}</TableCell>
+				<TableCell align="center">{row.invoice_address}</TableCell>
+				<TableCell align="center">{row.consumers ? row.consumers.length : 0 }</TableCell>
+				<TableCell align="center">{row.contract_date || 'N/A'}</TableCell>
+				<TableCell align="center">{row.service_type || 'none'}</TableCell>
+				<TableCell align="center">{row.status ? "Active" : "Inactive"}</TableCell>
+				<TableCell align="center">
 					<IconButton
 						color="primary"
 						component="span"
@@ -163,10 +167,13 @@ const SimpleTable = (props) => {
 						<TableHead>
 							<TableRow>
 								<TableCell>Name</TableCell>
-								<TableCell align="right">RUC</TableCell>
-								<TableCell align="right">Invoice Address</TableCell>
-								<TableCell align="right">Status</TableCell>
-								<TableCell align="right">Actions</TableCell>
+								<TableCell align="center">RUC</TableCell>
+								<TableCell align="center">Invoice Address</TableCell>
+								<TableCell align="center">Client Qty</TableCell>
+								<TableCell align="center">Contract Date</TableCell>
+								<TableCell align="center">Service Type</TableCell>
+								<TableCell align="center">Status</TableCell>
+								<TableCell align="center">Actions</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
