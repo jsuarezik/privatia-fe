@@ -69,7 +69,6 @@ const SimpleTable = (props) => {
 		history.push(`/companies/${row.id}/contacts`);
 	}
 	
-
 	const handleBodyRow = () => {
 		if (!dataRow) return null;
 
@@ -80,7 +79,8 @@ const SimpleTable = (props) => {
 				</TableCell>
 				<TableCell align="center">{row.ruc}</TableCell>
 				<TableCell align="center">{row.invoice_address}</TableCell>
-				<TableCell align="center">{row.consumers ? row.consumers.length : 0 }</TableCell>
+				<TableCell align="center">{row.client_qty}</TableCell>
+				<TableCell align="center">{row.server_qty}</TableCell>
 				<TableCell align="center">{row.contract_date || 'N/A'}</TableCell>
 				<TableCell align="center">{row.service_type || 'none'}</TableCell>
 				<TableCell align="center">{row.status ? "Active" : "Inactive"}</TableCell>
@@ -169,7 +169,8 @@ const SimpleTable = (props) => {
 								<TableCell>Name</TableCell>
 								<TableCell align="center">RUC</TableCell>
 								<TableCell align="center">Invoice Address</TableCell>
-								<TableCell align="center">Client Qty</TableCell>
+								<TableCell align="center">Clients Qty</TableCell>
+								<TableCell align="center">Servers Qty</TableCell>
 								<TableCell align="center">Contract Date</TableCell>
 								<TableCell align="center">Service Type</TableCell>
 								<TableCell align="center">Status</TableCell>

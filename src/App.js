@@ -7,6 +7,7 @@ import ContactList from "./components/Contacts/ContactList"
 
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import CreateContact from "./components/Contacts/CreateContact";
+import Login from "./components/Login/Login";
 
 export default class extends React.Component {
   render() {
@@ -33,6 +34,11 @@ export default class extends React.Component {
               exact
               path="/contacts/:id/edit"
               component={CreateContact}
+            />
+            <Route
+              exact
+              path="/"
+              component={Login}
             />
           </Switch>
         </BrowserRouter>

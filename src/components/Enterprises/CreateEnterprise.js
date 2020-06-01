@@ -9,7 +9,9 @@ import {
   TextField,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  FormGroup,
+  FormLabel
 } from "@material-ui/core";
 import {
   KeyboardDatePicker,
@@ -27,10 +29,13 @@ const useStyles = makeStyles({
   form: {
     width: "100%",
     padding: 10
+  },
+  formGroup : {
+    padding : 20
   }
 });
 
-const INITIAL_FORM = { name: "", ruc: "", invoice_address: "", online_invoice_address: "" , status : false, contract_date: new Date(), service_type : ''};
+const INITIAL_FORM = { name: "", ruc: "", invoice_address: "", online_invoice_address: "" , status : false, contract_date: new Date(), service_type : '' , client_qty : 0 , server_qty : 0};
 
 const CreateEnterprise = (props) => {
   const classes = useStyles();
@@ -61,7 +66,6 @@ const CreateEnterprise = (props) => {
   const handleChange = event => {
     const target = event.target;
     const { name, value } = target;
-    console.log(name, value);
     setFormValues({ ...formValues, [name]: value });
   };
 
@@ -94,12 +98,150 @@ const CreateEnterprise = (props) => {
             format="yyyy-MM-dd"
             margin="normal"
             name="contract_date"
+            label="Contact Date"
+            fullWidth
             value={formValues.contract_date}
-            onChange={(date) => setFormValues({ ... formValues, contract_date : date})}
+            onChange={(date) => {
+              console.log(date);
+              setFormValues({ ... formValues, contract_date : date})
+            }}
          >
 
         </KeyboardDatePicker>
       </MuiPickersUtilsProvider>
+    )
+  }
+
+  const handleForm = () => {
+    return (
+      <>
+       <form className={classes.form} onSubmit={handleSubmit}>
+        {handleGeneralInfoFormGroup()}
+        <br />
+        {handleContractInfoFormGroup()}
+        <br />
+        <Grid item xs={12}>
+          <Button type="submit" color="primary" variant="contained">
+            Save
+          </Button>
+        </Grid>
+       </form>
+      </>
+    )
+  }
+
+  const handleGeneralInfoFormGroup = () => {
+    return (
+      <>
+        <Grid item xs={12} component={Paper} className={classes.formGroup}>
+          <FormLabel>
+            General Info
+          </FormLabel>
+          <TextField
+            label="Name"
+            fullWidth
+            margin="normal"
+            name="name"
+            value={formValues.name}
+            onChange={handleChange}
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+          <TextField
+            label="RUC"
+            fullWidth
+            margin="normal"
+            name="ruc"
+            value={formValues.ruc}
+            onChange={handleChange}
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+          <TextField
+            label="Invoice Address"
+            fullWidth
+            margin="normal"
+            name="invoice_address"
+            value={formValues.invoice_address}
+            onChange={handleChange}
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+          <TextField
+            label="Online Invoice Address"
+            fullWidth
+            margin="normal"
+            name="online_invoice_address"
+            value={formValues.online_invoice_address}
+            onChange={handleChange}
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+        </Grid>
+      </>
+    )
+  }
+
+  const handleContractInfoFormGroup = () => {
+    return (
+      <>
+       <Grid item xs={12} component={Paper} className={classes.formGroup}> 
+        <FormLabel> Contract Info </FormLabel>
+        <TextField
+            label="Client Quantity"
+            fullWidth
+            margin="normal"
+            name="client_qty"
+            type="number"
+            value={formValues.client_qty}
+            onChange={handleChange}
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+          <TextField
+            label="Server Quantity"
+            fullWidth
+            margin="normal"
+            name="server_qty"
+            type="number"
+            value={formValues.server_qty}
+            onChange={handleChange}
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+        {handleDatePicker()}
+        {handleSelect('Status', 'status', handleChange, [ {value : true, label : 'Active'}, { value : false, label : 'Inactive' }])}
+       </Grid>
+      </>
+    )
+  }
+
+  const handleSelect = (label, name , handler, items) => {
+    return (
+      <>
+        <InputLabel shrink>
+          <Typography>
+            {label}
+          </Typography>
+        </InputLabel>
+        <Select
+          name={name}
+          value={formValues[name]}
+          onChange={handler}
+          fullWidth
+        >
+          {items.map(item => 
+            <MenuItem value={item.value}>  
+              {item.label}      
+            </MenuItem>)}
+        </Select>
+      </>
     )
   }
   return (
@@ -116,73 +258,8 @@ const CreateEnterprise = (props) => {
               BACK
             </Button>
           </Grid>
-          <Grid container xs={12} component={Paper}>
-            <form className={classes.form} onSubmit={handleSubmit}>
-              <TextField
-                label="Name"
-                fullWidth
-                margin="normal"
-                name="name"
-                value={formValues.name}
-                onChange={handleChange}
-                InputLabelProps={{
-                  shrink: true
-                }}
-              />
-              <TextField
-                label="RUC"
-                fullWidth
-                margin="normal"
-                name="ruc"
-                value={formValues.ruc}
-                onChange={handleChange}
-                InputLabelProps={{
-                  shrink: true
-                }}
-              />
-              <TextField
-                label="Invoice Address"
-                fullWidth
-                margin="normal"
-                name="invoice_address"
-                value={formValues.invoice_address}
-                onChange={handleChange}
-                InputLabelProps={{
-                  shrink: true
-                }}
-              />
-              <TextField
-                label="Online Invoice Address"
-                fullWidth
-                margin="normal"
-                name="online_invoice_address"
-                value={formValues.online_invoice_address}
-                onChange={handleChange}
-                InputLabelProps={{
-                  shrink: true
-                }}
-              />
-              {handleDatePicker()}
-              <InputLabel shrink>
-                <Typography>
-                  Status
-                </Typography>
-              </InputLabel>
-              <Select
-                name="status"
-                value={formValues.status}
-                onChange={handleChange}
-              >
-                <MenuItem value={true}> Active </MenuItem>
-                <MenuItem value={false}> Inactive </MenuItem>
-              </Select>
-              <br /> <br />
-              <Grid item xs={12}>
-                <Button type="submit" color="primary" variant="contained">
-                  <Typography> save </Typography>
-                </Button>
-              </Grid>
-            </form>
+          <Grid container xs={12}>
+            {handleForm()}
           </Grid>
         </Grid>
       </Container>
